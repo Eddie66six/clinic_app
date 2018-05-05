@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../components/buttons/alertButton.dart';
 import '../../components/buttons/primaryButton.dart';
 import '../../components/inputs/normalInput.dart';
+import '../../loading.dart';
+import '../../services/cepService.dart';
 import '../menu/menuScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,11 +62,41 @@ class LoginScreenState extends State<LoginScreen> {
                               },
                             )));
                   } else {
-                    Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new MenuScreen()),
-                    );
+                    Loading.onLoadingShow(context);
+                    var cep = new Cep();
+                    cep.getAdress('18052601').then((result){
+                        print(result.data);
+                        Loading.onLoadingHide(context);
+                        if(!result.error)
+                          Navigator.push(context,new MaterialPageRoute(builder: (context) => new MenuScreen()));
+                        else{
+                          showDialog(
+                            context: context,
+                            child: new AlertDialog(
+                              title: new Text(result.data),
+                              content: new AlertButton(
+                                text: "OK",
+                                screenWidthSize: size.width,
+                                tap: () {
+                                  Navigator.pop(context);
+                                },
+                          )));
+                        }
+                      }
+                    ).catchError((error){
+                      Loading.onLoadingHide(context);
+                      showDialog(
+                            context: context,
+                            child: new AlertDialog(
+                              title: new Text('Erro'),
+                              content: new AlertButton(
+                                text: "OK",
+                                screenWidthSize: size.width,
+                                tap: () {
+                                  Navigator.pop(context);
+                                },
+                          )));
+                    });
                   }
                 },
               ),
