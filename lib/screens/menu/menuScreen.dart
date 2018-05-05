@@ -5,8 +5,13 @@ import '../../system.dart';
 import '../clinicAbout/clinicAboutScreen.dart';
 import '../specialty/specialtyScreen.dart';
 
-MenuScreenState menuScreenState = new MenuScreenState();
+//para inserir um nome menu
+//1 - apos criar pagina que vai ter no menu é nescessario registrala
+//-> esse mesmo arquivo -> _getInstacePage
+//2 - insira no array de config
+//-> esse mesmo arquivo -> MenuScreen -> var menus
 
+MenuScreenState menuScreenState = new MenuScreenState();
 class MenuScreen extends StatefulWidget {
   //first page to initialize
   Widget pageSelected = new ClinicAboutScreen();

@@ -6,8 +6,6 @@ import '../../components/inputs/normalInput.dart';
 import '../menu/menuScreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  // LoginScreen({Key key, this.title}) : super(key: key);
-  // final String title;
   @override
   LoginScreenState createState() => new LoginScreenState();
 }
