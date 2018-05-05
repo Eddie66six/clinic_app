@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 
+import '../../models/menuItem.dart';
 import '../../system.dart';
-import '../clinicEnvelope/clinicAboutScreen.dart';
+import '../clinicAbout/clinicAboutScreen.dart';
 import '../specialty/specialtyScreen.dart';
 
+MenuScreenState menuScreenState = new MenuScreenState();
+
 class MenuScreen extends StatefulWidget {
+  //first page to initialize
   Widget pageSelected = new ClinicAboutScreen();
   int selectedIndex = 0;
   String title = 'Sobre';
 
-  @override
-  MenuScreenState createState() => new MenuScreenState();
-}
+  //config menus
+  var menus = <MenuItem>[
+    new MenuItem('Sobre', 'assets/images/about.png', ClinicAboutScreen),
+    new MenuItem(
+        'Especialidades', 'assets/images/specialty.png', SpecialtyScreen),
+    new MenuItem(
+        'erro', 'assets/images/specialty.png', null),
+  ];
 
+  @override
+  MenuScreenState createState() => menuScreenState;
+}
 class MenuScreenState extends State<MenuScreen> {
+  var menus = List<Widget>();
   @override
   Widget build(BuildContext context) {
+    //generate menus
+    _createMenus();
     return new Scaffold(
         appBar: new AppBar(
           title: Text(widget.title),
@@ -47,70 +62,79 @@ class MenuScreenState extends State<MenuScreen> {
                   )
                 ],
               ))),
-          new Column(
-            children: <Widget>[
-              //sobre
-              new Container(
-                child: new InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        widget.pageSelected = new ClinicAboutScreen();
-                        widget.selectedIndex = 0;
-                        widget.title = 'Sobre';
-                      });
-                    },
-                    child: new ItemMenu(widget.selectedIndex, 'assets/images/about.png', 'Sobre', 0)),
-              ),
-              //especialidades
-              new Container(
-                child: new InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        widget.pageSelected = new SpecialtyScreen();
-                        widget.selectedIndex = 1;
-                        widget.title = 'Especialidades';
-                      });
-                    },
-                    child: new ItemMenu(widget.selectedIndex, 'assets/images/specialty.png', 'Especialidades',1)),
-              ),
-            ],
-          ),
+            //rows
+            new Column(children: menus),
         ])))),
         body: widget.pageSelected);
   }
 }
 
-class ItemMenu extends StatelessWidget {
-  ItemMenu(this.selectedIndex, this.icon, this.text, this.index);
-  int selectedIndex;
-  String icon;
-  String text;
-  final int index;
+//register pages for menu
+Widget _getInstacePage(Type type) {
+  switch (type) {
+    case ClinicAboutScreen:
+      return new ClinicAboutScreen();
+    case SpecialtyScreen:
+      return new SpecialtyScreen();
+    default:
+      return (new Center(child: new Text("Pagina não encontrada")));
+  }
+}
+
+//create menus
+void _createMenus() {
+  if (menuScreenState.menus.length != menuScreenState.widget.menus.length) {
+    var index = 0;
+    for (var menu in menuScreenState.widget.menus) {
+      menuScreenState.menus.add(new RowMenuItem(menu, index));
+      index++;
+    }
+  }
+}
+
+class RowMenuItem extends StatefulWidget {
+  RowMenuItem(this.menu, this.index);
+  MenuItem menu;
+  int index;
+  @override
+  RowMenuItemState createState() => new RowMenuItemState();
+}
+class RowMenuItemState extends State<RowMenuItem> {
   @override
   Widget build(BuildContext context) {
     return (new Container(
-      padding: new EdgeInsets.all(10.0),
-      decoration: new BoxDecoration(
-          color: selectedIndex == index
-              ? SystemColors.SELECTED_MENU_BACKGROUND
-              : Colors.transparent),
-      child: new Row(
-        children: <Widget>[
-          new Container(
-            child: new Image(
-              image: new AssetImage(icon),
-              height: 35.0,
-              width: 35.0,
+      child: new InkWell(
+          onTap: () {
+            Navigator.pop(menuScreenState.context);
+            menuScreenState.setState(() {
+              menuScreenState.widget.pageSelected =
+                  _getInstacePage(widget.menu.pageType);
+              menuScreenState.widget.selectedIndex = widget.index;
+              menuScreenState.widget.title = widget.menu.title;
+            });
+          },
+          child: new Container(
+            padding: new EdgeInsets.all(10.0),
+            decoration: new BoxDecoration(
+                color: menuScreenState.widget.selectedIndex == widget.index
+                    ? SystemColors.SELECTED_MENU_BACKGROUND
+                    : Colors.transparent),
+            child: new Row(
+              children: <Widget>[
+                new Container(
+                  child: new Image(
+                    image: new AssetImage(widget.menu.icon),
+                    height: 35.0,
+                    width: 35.0,
+                  ),
+                ),
+                new Container(
+                  margin: new EdgeInsets.only(left: 10.0),
+                  child: new Text(widget.menu.title),
+                )
+              ],
             ),
-          ),
-          new Container(
-            margin: new EdgeInsets.only(left: 10.0),
-            child: new Text(text),
-          )
-        ],
-      ),
+          )),
     ));
   }
 }

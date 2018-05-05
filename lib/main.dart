@@ -1,4 +1,3 @@
-import 'package:clinic_app/screens/clinicEnvelope/clinicAboutScreen.dart';
 import 'package:clinic_app/system.dart';
 import 'package:flutter/material.dart';
 

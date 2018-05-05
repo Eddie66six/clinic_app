@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../components/buttons/alertButton.dart';
 import '../../components/buttons/primaryButton.dart';
 import '../../components/inputs/normalInput.dart';
-import '../../system.dart';
-import '../clinicEnvelope/clinicAboutScreen.dart';
 import '../menu/menuScreen.dart';
 
 class LoginScreen extends StatefulWidget {
