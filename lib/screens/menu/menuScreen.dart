@@ -1,8 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
 import '../../models/menuItem.dart';
 import '../../system.dart';
 import '../clinicAbout/clinicAboutScreen.dart';
+import '../login/loginScreen.dart';
 import '../specialty/specialtyScreen.dart';
 
 //para inserir um nome menu
@@ -12,7 +17,9 @@ import '../specialty/specialtyScreen.dart';
 //-> esse mesmo arquivo -> MenuScreen -> var menus
 
 MenuScreenState menuScreenState = new MenuScreenState();
+
 class MenuScreen extends StatefulWidget {
+  MenuScreen({ Key key }) : super(key: key);
   //first page to initialize
   Widget pageSelected = new ClinicAboutScreen();
   int selectedIndex = 0;
@@ -23,54 +30,77 @@ class MenuScreen extends StatefulWidget {
     new MenuItem('Sobre', 'assets/images/about.png', ClinicAboutScreen),
     new MenuItem(
         'Especialidades', 'assets/images/specialty.png', SpecialtyScreen),
-    new MenuItem(
-        'erro', 'assets/images/specialty.png', null),
+    new MenuItem('Sair', 'assets/images/exit.png', null),
   ];
 
   @override
   MenuScreenState createState() => menuScreenState;
 }
+
 class MenuScreenState extends State<MenuScreen> {
   var menus = List<Widget>();
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          child: new AlertDialog(
+            title: new Text('Deseja sair?'),
+            content: new Text('O aplicativo sera fechado'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('Não'),
+              ),
+              new FlatButton(
+                onPressed: () => exit(0),
+                child: new Text('Sim'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     //generate menus
     _createMenus();
-    return new Scaffold(
-        appBar: new AppBar(
-          title: Text(widget.title),
-        ),
-        drawer: new Drawer(
-            child: new Center(
-                child: new Container(
-                    child: new Column(children: <Widget>[
-          new Container(
-              height: 200.0,
-              decoration: new BoxDecoration(
-                color: SystemColors.TOP_MENU_BACKGROUND,
-              ),
-              child: new Center(
-                  child: new Column(
-                children: <Widget>[
-                  new Container(
-                    height: 100.0,
-                    width: 100.0,
-                    margin: new EdgeInsets.only(top: 40.0),
-                    child: new CircleAvatar(
-                      backgroundImage: new NetworkImage(
-                          "https://whiplash.org/imagens-n/temp09/1434771134_08.jpg"),
-                    ),
+    return new WillPopScope(
+        onWillPop: _onWillPop,
+        child: new Scaffold(
+            appBar: new AppBar(
+              title: Text(widget.title),
+            ),
+            drawer: new Drawer(
+                child: new Center(
+                    child: new Container(
+                        child: new Column(children: <Widget>[
+              new Container(
+                  height: 200.0,
+                  decoration: new BoxDecoration(
+                    color: SystemColors.TOP_MENU_BACKGROUND,
                   ),
-                  new Container(
-                    padding: new EdgeInsets.all(20.0),
-                    child: new Text("Guilherme Eddie"),
-                  )
-                ],
-              ))),
-            //rows
-            new Column(children: menus),
-        ])))),
-        body: widget.pageSelected);
+                  child: new Center(
+                      child: new Column(
+                    children: <Widget>[
+                      new Container(
+                        height: 100.0,
+                        width: 100.0,
+                        margin: new EdgeInsets.only(top: 40.0),
+                        child: new CircleAvatar(
+                          backgroundImage: new NetworkImage(
+                              "https://whiplash.org/imagens-n/temp09/1434771134_08.jpg"),
+                        ),
+                      ),
+                      new Container(
+                        padding: new EdgeInsets.all(20.0),
+                        child: new Text("Guilherme Eddie"),
+                      )
+                    ],
+                  ))),
+              //rows
+              new Column(children: menus),
+            ])))),
+            body: widget.pageSelected));
   }
 }
 
@@ -82,7 +112,10 @@ Widget _getInstacePage(Type type) {
     case SpecialtyScreen:
       return new SpecialtyScreen();
     default:
-      return (new Center(child: new Text("Pagina não encontrada")));
+      Navigator.pushAndRemoveUntil(menuScreenState.context,new MaterialPageRoute(builder: (context) => new LoginScreen()),(Route<dynamic> route) => false);
+      //resete state
+      menuScreenState = new MenuScreenState();
+      return null;
   }
 }
 
@@ -104,6 +137,7 @@ class RowMenuItem extends StatefulWidget {
   @override
   RowMenuItemState createState() => new RowMenuItemState();
 }
+
 class RowMenuItemState extends State<RowMenuItem> {
   @override
   Widget build(BuildContext context) {

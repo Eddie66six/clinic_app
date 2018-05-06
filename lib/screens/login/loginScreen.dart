@@ -55,7 +55,7 @@ class LoginScreenState extends State<LoginScreen> {
                         print(result.data);
                         SystemLoading.onLoadingHide(context);
                         if(!result.error)
-                          Navigator.push(context,new MaterialPageRoute(builder: (context) => new MenuScreen()));
+                          Navigator.pushAndRemoveUntil(context,new MaterialPageRoute(builder: (context) => new MenuScreen()),(Route<dynamic> route) => false);
                         else{
                           SystemDialog.openAlertDialog(context,size.width, result.data);
                         }
