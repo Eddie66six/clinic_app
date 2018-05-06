@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../components/buttons/alertButton.dart';
 import '../../components/buttons/primaryButton.dart';
 import '../../components/inputs/normalInput.dart';
-import '../../loading.dart';
 import '../../services/cepService.dart';
+import '../../systemDialog.dart';
+import '../../systemLoading.dart';
 import '../menu/menuScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,56 +46,23 @@ class LoginScreenState extends State<LoginScreen> {
                 text: "Entrar",
                 screenWidthSize: size.width,
                 tap: () {
-                  if (cpfController.text == null ||
-                      cpfController.text == "" ||
-                      passwordController.text == null ||
-                      passwordController.text == "") {
-                    showDialog(
-                        context: context,
-                        child: new AlertDialog(
-                            title: new Text("Dados não encontrados"),
-                            content: new AlertButton(
-                              text: "OK",
-                              screenWidthSize: size.width,
-                              tap: () {
-                                Navigator.pop(context);
-                              },
-                            )));
+                  if (cpfController.text == null || cpfController.text == "" || passwordController.text == null || passwordController.text == "") {
+                    SystemDialog.openAlertDialog(context,size.width, 'Dados Não encontrados');
                   } else {
-                    Loading.onLoadingShow(context);
+                    SystemLoading.onLoadingShow(context);
                     var cep = new Cep();
                     cep.getAdress('18052601').then((result){
                         print(result.data);
-                        Loading.onLoadingHide(context);
+                        SystemLoading.onLoadingHide(context);
                         if(!result.error)
                           Navigator.push(context,new MaterialPageRoute(builder: (context) => new MenuScreen()));
                         else{
-                          showDialog(
-                            context: context,
-                            child: new AlertDialog(
-                              title: new Text(result.data),
-                              content: new AlertButton(
-                                text: "OK",
-                                screenWidthSize: size.width,
-                                tap: () {
-                                  Navigator.pop(context);
-                                },
-                          )));
+                          SystemDialog.openAlertDialog(context,size.width, result.data);
                         }
                       }
                     ).catchError((error){
-                      Loading.onLoadingHide(context);
-                      showDialog(
-                            context: context,
-                            child: new AlertDialog(
-                              title: new Text('Erro'),
-                              content: new AlertButton(
-                                text: "OK",
-                                screenWidthSize: size.width,
-                                tap: () {
-                                  Navigator.pop(context);
-                                },
-                          )));
+                      SystemLoading.onLoadingHide(context);
+                      SystemDialog.openAlertDialog(context,size.width, 'Erro');
                     });
                   }
                 },

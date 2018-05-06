@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
-class Loading{
+class SystemLoading{
   static void onLoadingShow(BuildContext context) {
     showDialog(
       context: context,
