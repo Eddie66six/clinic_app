@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../main.dart';
-import '../../models/menuItem.dart';
+import '../../models/menuItemModel.dart';
 import '../../system.dart';
 import '../clinicAbout/clinicAboutScreen.dart';
 import '../login/loginScreen.dart';
 import '../specialty/specialtyScreen.dart';
+import 'userModel.dart';
 
 //para inserir um nome menu
 //1 - apos criar pagina que vai ter no menu é nescessario registrala
@@ -19,18 +19,18 @@ import '../specialty/specialtyScreen.dart';
 MenuScreenState menuScreenState = new MenuScreenState();
 
 class MenuScreen extends StatefulWidget {
-  MenuScreen({ Key key }) : super(key: key);
+  MenuScreen({Key key}) : super(key: key);
   //first page to initialize
   Widget pageSelected = new ClinicAboutScreen();
   int selectedIndex = 0;
   String title = 'Sobre';
 
   //config menus
-  var menus = <MenuItem>[
-    new MenuItem('Sobre', 'assets/images/about.png', ClinicAboutScreen),
-    new MenuItem(
+  var menus = <MenuItemModel>[
+    new MenuItemModel('Sobre', 'assets/images/about.png', ClinicAboutScreen),
+    new MenuItemModel(
         'Especialidades', 'assets/images/specialty.png', SpecialtyScreen),
-    new MenuItem('Sair', 'assets/images/exit.png', null),
+    new MenuItemModel('Sair', 'assets/images/exit.png', null),
   ];
 
   @override
@@ -39,27 +39,7 @@ class MenuScreen extends StatefulWidget {
 
 class MenuScreenState extends State<MenuScreen> {
   var menus = List<Widget>();
-  Future<bool> _onWillPop() {
-    return showDialog(
-          context: context,
-          child: new AlertDialog(
-            title: new Text('Deseja sair?'),
-            content: new Text('O aplicativo sera fechado'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('Não'),
-              ),
-              new FlatButton(
-                onPressed: () => exit(0),
-                child: new Text('Sim'),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-  }
-
+  var user = new UserModel('Guilherme Eddie','https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
   @override
   Widget build(BuildContext context) {
     //generate menus
@@ -74,29 +54,7 @@ class MenuScreenState extends State<MenuScreen> {
                 child: new Center(
                     child: new Container(
                         child: new Column(children: <Widget>[
-              new Container(
-                  height: 200.0,
-                  decoration: new BoxDecoration(
-                    color: SystemColors.TOP_MENU_BACKGROUND,
-                  ),
-                  child: new Center(
-                      child: new Column(
-                    children: <Widget>[
-                      new Container(
-                        height: 100.0,
-                        width: 100.0,
-                        margin: new EdgeInsets.only(top: 40.0),
-                        child: new CircleAvatar(
-                          backgroundImage: new NetworkImage(
-                              "https://whiplash.org/imagens-n/temp09/1434771134_08.jpg"),
-                        ),
-                      ),
-                      new Container(
-                        padding: new EdgeInsets.all(20.0),
-                        child: new Text("Guilherme Eddie"),
-                      )
-                    ],
-                  ))),
+              new HeaderMenu(),
               //rows
               new Column(children: menus),
             ])))),
@@ -112,7 +70,10 @@ Widget _getInstacePage(Type type) {
     case SpecialtyScreen:
       return new SpecialtyScreen();
     default:
-      Navigator.pushAndRemoveUntil(menuScreenState.context,new MaterialPageRoute(builder: (context) => new LoginScreen()),(Route<dynamic> route) => false);
+      Navigator.pushAndRemoveUntil(
+          menuScreenState.context,
+          new MaterialPageRoute(builder: (context) => new LoginScreen()),
+          (Route<dynamic> route) => false);
       //resete state
       menuScreenState = new MenuScreenState();
       return null;
@@ -130,9 +91,10 @@ void _createMenus() {
   }
 }
 
+//row for menu
 class RowMenuItem extends StatefulWidget {
   RowMenuItem(this.menu, this.index);
-  MenuItem menu;
+  MenuItemModel menu;
   int index;
   @override
   RowMenuItemState createState() => new RowMenuItemState();
@@ -176,4 +138,55 @@ class RowMenuItemState extends State<RowMenuItem> {
           )),
     ));
   }
+}
+
+//header of menu
+class HeaderMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return (new Container(
+        height: 200.0,
+        decoration: new BoxDecoration(
+          color: SystemColors.TOP_MENU_BACKGROUND,
+        ),
+        child: new Center(
+            child: new Column(
+          children: <Widget>[
+            new Container(
+              height: 100.0,
+              width: 100.0,
+              margin: new EdgeInsets.only(top: 40.0),
+              child: new CircleAvatar(
+                backgroundImage: new NetworkImage(menuScreenState.user.urlImage),
+              ),
+            ),
+            new Container(
+              padding: new EdgeInsets.all(20.0),
+              child: new Text(menuScreenState.user.name),
+            )
+          ],
+        ))));
+  }
+}
+
+//close app
+Future<bool> _onWillPop() {
+  return showDialog(
+        context: menuScreenState.context,
+        child: new AlertDialog(
+          title: new Text('Deseja sair?'),
+          content: new Text('O aplicativo sera fechado'),
+          actions: <Widget>[
+            new FlatButton(
+              onPressed: () => Navigator.of(menuScreenState.context).pop(false),
+              child: new Text('Não'),
+            ),
+            new FlatButton(
+              onPressed: () => exit(0),
+              child: new Text('Sim'),
+            ),
+          ],
+        ),
+      ) ??
+      false;
 }
