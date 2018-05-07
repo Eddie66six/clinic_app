@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../models/menuItemModel.dart';
+import '../../models/userModel.dart';
 import '../../system.dart';
 import '../clinicAbout/clinicAboutScreen.dart';
 import '../login/loginScreen.dart';
 import '../specialty/specialtyScreen.dart';
-import 'userModel.dart';
 
 //para inserir um nome menu
 //1 - apos criar pagina que vai ter no menu é nescessario registrala

@@ -27,11 +27,11 @@ class LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               new Container(
                   decoration: new BoxDecoration(),
-                  margin: new EdgeInsets.only(top: 40.0),
+                  margin: new EdgeInsets.only(top: 35.0),
                   child: new Image(
                     image: new AssetImage('assets/images/loginLogo.png'),
-                    height: 170.0,
-                    width: 170.0,
+                    height: 160.0,
+                    width: 160.0,
                   )),
               new NormalInput(
                 hintText: "CPF",
