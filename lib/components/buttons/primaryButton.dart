@@ -5,9 +5,9 @@ import '../../system.dart';
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({Key key, this.text, this.screenWidthSize, this.tap})
       : super(key: key);
-  String text;
-  double screenWidthSize;
-  Function tap;
+  final String text;
+  final double screenWidthSize;
+  final Function tap;
   @override
   Widget build(BuildContext context) {
     return (new GestureDetector(

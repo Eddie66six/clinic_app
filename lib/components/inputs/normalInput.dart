@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class NormalInput extends StatelessWidget {
   NormalInput({Key key, this.hintText, this.isPassword = false, this.controller})
       : super(key: key);
-  String hintText;
-  bool isPassword;
-  TextEditingController controller;
+  final String hintText;
+  final bool isPassword;
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return (

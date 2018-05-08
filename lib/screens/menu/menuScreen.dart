@@ -16,17 +16,17 @@ import '../specialty/specialtyScreen.dart';
 //2 - insira no array de config
 //-> esse mesmo arquivo -> MenuScreen -> var menus
 
+//first page to initialize
 MenuScreenState menuScreenState = new MenuScreenState();
+Widget pageSelected = new ClinicAboutScreen();
+int selectedIndex = 0;
+String title = 'Sobre';
 
 class MenuScreen extends StatefulWidget {
   MenuScreen({Key key}) : super(key: key);
-  //first page to initialize
-  Widget pageSelected = new ClinicAboutScreen();
-  int selectedIndex = 0;
-  String title = 'Sobre';
 
   //config menus
-  var menus = <MenuItemModel>[
+  final List<MenuItemModel> menus = <MenuItemModel>[
     new MenuItemModel(
         'Sobre', 'assets/images/about.png', ClinicAboutScreen, null),
     new MenuItemModel(
@@ -48,6 +48,9 @@ class MenuScreenState extends State<MenuScreen> {
       'https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
   @override
   Widget build(BuildContext context) {
+    if(menuScreenState.widget == null){
+      reset();
+    }
     var size = MediaQuery.of(context).size;
     //generate menus
     _createMenus();
@@ -70,12 +73,12 @@ class MenuScreenState extends State<MenuScreen> {
 //custom app bar
 class CustomAppBar extends StatelessWidget {
   CustomAppBar(this.menuScreen, this.size, this._scaffoldKey);
-  MenuScreen menuScreen;
-  Size size;
+  final MenuScreen menuScreen;
+  final Size size;
   final GlobalKey<ScaffoldState> _scaffoldKey;
   @override
   Widget build(BuildContext context) {
-    return (menuScreen.menus[menuScreen.selectedIndex].headerBackground != null
+    return (menuScreen.menus[selectedIndex].headerBackground != null
         ? new Column(
             children: <Widget>[
               new Container(
@@ -83,7 +86,7 @@ class CustomAppBar extends StatelessWidget {
                   width: size.width,
                   decoration: new BoxDecoration(
                       image: new DecorationImage(
-                          image: new AssetImage(menuScreen.menus[menuScreen.selectedIndex].headerBackground),
+                          image: new AssetImage(menuScreen.menus[selectedIndex].headerBackground),
                           fit: BoxFit.fill)),
                   child: new Container(
                     padding: new EdgeInsets.only(top: 30.0),
@@ -93,7 +96,7 @@ class CustomAppBar extends StatelessWidget {
                       onPressed: () => _scaffoldKey.currentState.openDrawer(),
                     ),
                   )),
-              menuScreen.pageSelected
+              pageSelected
             ],
           )
         : new Column(
@@ -108,7 +111,7 @@ class CustomAppBar extends StatelessWidget {
                   onPressed: () => _scaffoldKey.currentState.openDrawer(),
                 ),
               ),
-              menuScreen.pageSelected
+              pageSelected
             ],
           ));
   }
@@ -126,10 +129,15 @@ Widget _getInstacePage(Type type) {
           menuScreenState.context,
           new MaterialPageRoute(builder: (context) => new LoginScreen()),
           (Route<dynamic> route) => false);
-      //resete state
       menuScreenState = new MenuScreenState();
       return null;
   }
+}
+
+void reset(){
+  pageSelected = new ClinicAboutScreen();
+  selectedIndex = 0;
+  title = 'Sobre';
 }
 
 //create menus
@@ -146,12 +154,11 @@ void _createMenus() {
 //row for menu
 class RowMenuItem extends StatefulWidget {
   RowMenuItem(this.menu, this.index);
-  MenuItemModel menu;
-  int index;
+  final MenuItemModel menu;
+  final int index;
   @override
   RowMenuItemState createState() => new RowMenuItemState();
 }
-
 class RowMenuItemState extends State<RowMenuItem> {
   @override
   Widget build(BuildContext context) {
@@ -160,16 +167,16 @@ class RowMenuItemState extends State<RowMenuItem> {
           onTap: () {
             Navigator.pop(menuScreenState.context);
             menuScreenState.setState(() {
-              menuScreenState.widget.pageSelected =
+              selectedIndex = widget.index;
+              title = widget.menu.title;
+              pageSelected =
                   _getInstacePage(widget.menu.pageType);
-              menuScreenState.widget.selectedIndex = widget.index;
-              menuScreenState.widget.title = widget.menu.title;
             });
           },
           child: new Container(
             padding: new EdgeInsets.all(10.0),
             decoration: new BoxDecoration(
-                color: menuScreenState.widget.selectedIndex == widget.index
+                color: selectedIndex == widget.index
                     ? SystemColors.SELECTED_MENU_BACKGROUND
                     : Colors.transparent),
             child: new Row(
