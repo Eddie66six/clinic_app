@@ -27,10 +27,14 @@ class MenuScreen extends StatefulWidget {
 
   //config menus
   var menus = <MenuItemModel>[
-    new MenuItemModel('Sobre', 'assets/images/about.png', ClinicAboutScreen),
     new MenuItemModel(
-        'Especialidades', 'assets/images/specialty.png', SpecialtyScreen),
-    new MenuItemModel('Sair', 'assets/images/exit.png', null),
+        'Sobre', 'assets/images/about.png', ClinicAboutScreen, null),
+    new MenuItemModel(
+        'Especialidades',
+        'assets/images/specialty.png',
+        SpecialtyScreen,
+        'assets/images/specialtyHeaderBackground.png'),
+    new MenuItemModel('Sair', 'assets/images/exit.png', null, null),
   ];
 
   @override
@@ -38,18 +42,19 @@ class MenuScreen extends StatefulWidget {
 }
 
 class MenuScreenState extends State<MenuScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var menus = List<Widget>();
-  var user = new UserModel('Guilherme Eddie','https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
+  var user = new UserModel('Guilherme Eddie',
+      'https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     //generate menus
     _createMenus();
     return new WillPopScope(
         onWillPop: _onWillPop,
         child: new Scaffold(
-            appBar: new AppBar(
-              title: Text(widget.title),
-            ),
+            key: _scaffoldKey,
             drawer: new Drawer(
                 child: new Center(
                     child: new Container(
@@ -58,7 +63,54 @@ class MenuScreenState extends State<MenuScreen> {
               //rows
               new Column(children: menus),
             ])))),
-            body: widget.pageSelected));
+            body: new CustomAppBar(widget, size, _scaffoldKey)));
+  }
+}
+
+//custom app bar
+class CustomAppBar extends StatelessWidget {
+  CustomAppBar(this.menuScreen, this.size, this._scaffoldKey);
+  MenuScreen menuScreen;
+  Size size;
+  final GlobalKey<ScaffoldState> _scaffoldKey;
+  @override
+  Widget build(BuildContext context) {
+    return (menuScreen.menus[menuScreen.selectedIndex].headerBackground != null
+        ? new Column(
+            children: <Widget>[
+              new Container(
+                  height: size.height / 3.5,
+                  width: size.width,
+                  decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                          image: new AssetImage(menuScreen.menus[menuScreen.selectedIndex].headerBackground),
+                          fit: BoxFit.fill)),
+                  child: new Container(
+                    padding: new EdgeInsets.only(top: 30.0),
+                    alignment: Alignment.topLeft,
+                    child: new IconButton(
+                      icon: new Icon(Icons.dehaze),
+                      onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                    ),
+                  )),
+              menuScreen.pageSelected
+            ],
+          )
+        : new Column(
+            children: <Widget>[
+              new Container(
+                decoration:
+                    new BoxDecoration(color: SystemColors.PRIMARY_SWATCH),
+                padding: new EdgeInsets.only(top: 30.0),
+                alignment: Alignment.topLeft,
+                child: new IconButton(
+                  icon: new Icon(Icons.dehaze),
+                  onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                ),
+              ),
+              menuScreen.pageSelected
+            ],
+          ));
   }
 }
 
@@ -157,7 +209,8 @@ class HeaderMenu extends StatelessWidget {
               width: 100.0,
               margin: new EdgeInsets.only(top: 40.0),
               child: new CircleAvatar(
-                backgroundImage: new NetworkImage(menuScreenState.user.urlImage),
+                backgroundImage:
+                    new NetworkImage(menuScreenState.user.urlImage),
               ),
             ),
             new Container(

@@ -8,10 +8,8 @@ class SpecialtyScreen extends StatefulWidget{
 class SpecialtyScreenState extends State<SpecialtyScreen>{
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new Center(
+    return new Center(
         child: new Text("Especialidades"),
-      ),
     );
   }
 
