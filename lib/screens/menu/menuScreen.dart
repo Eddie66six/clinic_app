@@ -27,14 +27,20 @@ class MenuScreen extends StatefulWidget {
 
   //config menus
   final List<MenuItemModel> menus = <MenuItemModel>[
-    new MenuItemModel(
-        'Sobre', 'assets/images/about.png', ClinicAboutScreen, null),
-    new MenuItemModel(
-        'Especialidades',
-        'assets/images/specialty.png',
-        SpecialtyScreen,
-        'assets/images/specialtyHeaderBackground.png'),
-    new MenuItemModel('Sair', 'assets/images/exit.png', null, null),
+    new MenuItemModel('Sobre', 'assets/images/about.png', ClinicAboutScreen, null, null),
+    new MenuItemModel('Especialidades', 'assets/images/specialty.png', SpecialtyScreen,
+      'assets/images/specialtyHeaderBackground.png',
+      new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          new Text('Conheça tudo que o INCAR', style: new TextStyle(color: Colors.white, fontSize: 24.0 ,fontWeight: FontWeight.normal)),
+          new Center(child: new Text('faz por voçê!', style: new TextStyle(color: Colors.white, fontSize: 24.0 ,fontWeight: FontWeight.normal)),)
+        ],
+      )
+),
+    new MenuItemModel('Sair', 'assets/images/exit.png', null, null, null),
   ];
 
   @override
@@ -48,7 +54,7 @@ class MenuScreenState extends State<MenuScreen> {
       'https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
   @override
   Widget build(BuildContext context) {
-    if(menuScreenState.widget == null){
+    if (menuScreenState.widget == null) {
       reset();
     }
     var size = MediaQuery.of(context).size;
@@ -82,20 +88,31 @@ class CustomAppBar extends StatelessWidget {
         ? new Column(
             children: <Widget>[
               new Container(
-                  height: size.height / 3.5,
-                  width: size.width,
-                  decoration: new BoxDecoration(
-                      image: new DecorationImage(
-                          image: new AssetImage(menuScreen.menus[selectedIndex].headerBackground),
-                          fit: BoxFit.fill)),
-                  child: new Container(
-                    padding: new EdgeInsets.only(top: 30.0),
-                    alignment: Alignment.topLeft,
-                    child: new IconButton(
-                      icon: new Icon(Icons.dehaze),
-                      onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                height: size.height / 3.5,
+                width: size.width,
+                decoration: new BoxDecoration(
+                    image: new DecorationImage(
+                        image: new AssetImage(
+                            menuScreen.menus[selectedIndex].headerBackground),
+                        fit: BoxFit.fill)),
+                child: new Row(
+                  children: <Widget>[
+                    new Container(
+                      padding: new EdgeInsets.only(top: 35.0),
+                      alignment: Alignment.topLeft,
+                      child: new IconButton(
+                        icon: new Icon(Icons.dehaze),
+                        onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                      ),
                     ),
-                  )),
+                    new Container (
+                      height: size.height / 4,
+                      width: size.width /1.2,
+                      child: menuScreen.menus[selectedIndex].messageHeader ?? new Text('')
+                      )
+                  ],
+                ),
+              ),
               pageSelected
             ],
           )
@@ -134,7 +151,7 @@ Widget _getInstacePage(Type type) {
   }
 }
 
-void reset(){
+void reset() {
   pageSelected = new ClinicAboutScreen();
   selectedIndex = 0;
   title = 'Sobre';
@@ -159,6 +176,7 @@ class RowMenuItem extends StatefulWidget {
   @override
   RowMenuItemState createState() => new RowMenuItemState();
 }
+
 class RowMenuItemState extends State<RowMenuItem> {
   @override
   Widget build(BuildContext context) {
@@ -169,8 +187,7 @@ class RowMenuItemState extends State<RowMenuItem> {
             menuScreenState.setState(() {
               selectedIndex = widget.index;
               title = widget.menu.title;
-              pageSelected =
-                  _getInstacePage(widget.menu.pageType);
+              pageSelected = _getInstacePage(widget.menu.pageType);
             });
           },
           child: new Container(

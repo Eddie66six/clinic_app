@@ -72,7 +72,7 @@ class LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   new FlatButton(
                     onPressed: () {},
-                    child: new Text("Ainda não tem cadastro? Click aqui"),
+                    child: new Text("Primeiro acesso"),
                   ),
                 ],
               )
