@@ -135,12 +135,12 @@ class CustomAppBar extends StatelessWidget {
 }
 
 //register pages for menu
-Widget _getInstacePage(Type type) {
+Widget _getInstacePage(Type type, Size size) {
   switch (type) {
     case ClinicAboutScreen:
       return new ClinicAboutScreen();
     case SpecialtyScreen:
-      return new SpecialtyScreen();
+      return new SpecialtyScreen(size);
     default:
       Navigator.pushAndRemoveUntil(
           menuScreenState.context,
@@ -180,6 +180,7 @@ class RowMenuItem extends StatefulWidget {
 class RowMenuItemState extends State<RowMenuItem> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return (new Container(
       child: new InkWell(
           onTap: () {
@@ -187,7 +188,7 @@ class RowMenuItemState extends State<RowMenuItem> {
             menuScreenState.setState(() {
               selectedIndex = widget.index;
               title = widget.menu.title;
-              pageSelected = _getInstacePage(widget.menu.pageType);
+              pageSelected = _getInstacePage(widget.menu.pageType, size);
             });
           },
           child: new Container(
@@ -249,8 +250,7 @@ class HeaderMenu extends StatelessWidget {
 //close app
 Future<bool> _onWillPop() {
   return showDialog(
-        context: menuScreenState.context,
-        child: new AlertDialog(
+        context: menuScreenState.context, builder: (context) => new AlertDialog(
           title: new Text('Deseja sair?'),
           content: new Text('O aplicativo sera fechado'),
           actions: <Widget>[

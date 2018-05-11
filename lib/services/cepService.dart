@@ -20,6 +20,10 @@ class Cep {
         var contents = await response.transform(UTF8.decoder).join();
         data = contents;
       }
+      else{
+        data = 'Error: ' + response.statusCode.toString();
+        error = true;
+      }
       httpClient.close();
       return new HttpResult(error, data);
     } catch (e) {

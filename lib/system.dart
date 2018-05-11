@@ -16,6 +16,9 @@ class SystemColors {
   static const TOP_MENU_BACKGROUND = const Color.fromARGB(255, 20, 133, 204);
   static const SELECTED_MENU_BACKGROUND = const Color.fromARGB(255, 161,206,234);
 
+  //progress bar
+  static const PROGRESS_BAR_BACKGROUND =  Colors.grey;
+  static const PROGRESS_BAR_STATUS =  PRIMARY_SWATCH;
 }
 
 class SystemRadius {

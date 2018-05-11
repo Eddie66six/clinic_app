@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 class SystemLoading {
   static void onLoadingShow(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      child: new Dialog(
+    showDialog(context: context, barrierDismissible: false, builder: (context) => new Dialog(
         child: new Container(
           padding: new EdgeInsets.all(20.0),
             child: new Row(
