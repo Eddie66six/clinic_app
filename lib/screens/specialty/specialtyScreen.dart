@@ -1,48 +1,44 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 import '../../components/others/lineProgessBar.dart';
 import '../../models/specialtyModel.dart';
-import '../../services/cepService.dart';
+import '../../repository/cepRepository.dart';
 import '../../system.dart';
 import '../../systemDialog.dart';
 import '../../systemLoading.dart';
 
 class SpecialtyScreen extends StatefulWidget {
   SpecialtyScreen(this.size);
-  Size size;
+  final Size size;
   @override
   SpecialtyScreenState createState() => new SpecialtyScreenState();
 }
 
 class SpecialtyScreenState extends State<SpecialtyScreen> {
-var list = List<SpecialtyModel>();
+  var list = List<SpecialtyModel>();
+
+  Future<Null> _getSpecialty(String cep) async {
+    var objCep = await new CepRepository().fetchCep(cep);
+    setState(() {
+      print(objCep);
+    });
+  }
+
   @override
   void initState() {
-     // TODO: implement initState
-     super.initState();
-     new Future.delayed(Duration.zero, (){
-       SystemLoading.onLoadingShow(context);
-        var cep = new Cep();
-        cep.getAdress('18052601').then((result){
-          SystemLoading.onLoadingHide(context);
-          if(!result.error){
-            setState(() {
-              new List.generate(15, (index) {
-                list.add(new SpecialtyModel('seila - $index', new Random().nextDouble() * 100));
-              });
-            });
-          }
-          else{
-            SystemDialog.openAlertDialog(context,widget.size.width, result.data);
-          }
-        }).catchError((error){
-          SystemLoading.onLoadingHide(context);
-          SystemDialog.openAlertDialog(context,widget.size.width, 'Erro');
-        });
-     });
+    // TODO: implement initState
+    super.initState();
+    new Future.delayed(Duration.zero, () {
+      SystemLoading.onLoadingShow(context);
+      _getSpecialty('18052601').then((result) {
+        SystemLoading.onLoadingHide(context);
+      }).catchError((erro) {
+        SystemLoading.onLoadingHide(context);
+        SystemDialog.openAlertDialog(context, widget.size.width, 'Erro');
+      });
+    });
   }
 
   @override
@@ -55,7 +51,12 @@ var list = List<SpecialtyModel>();
         children: new List.generate(list.length, (index) {
           return new Container(
             margin: new EdgeInsets.only(bottom: 25.0),
-            child: new LineProgessBar(size, list[index].percentage, list[index].text, SystemColors.PROGRESS_BAR_BACKGROUND, SystemColors.PROGRESS_BAR_STATUS),
+            child: new LineProgessBar(
+                size,
+                list[index].percentage,
+                list[index].text,
+                SystemColors.PROGRESS_BAR_BACKGROUND,
+                SystemColors.PROGRESS_BAR_STATUS),
           );
         }),
       ),

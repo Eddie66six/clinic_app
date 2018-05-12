@@ -8,6 +8,8 @@ import '../../models/userModel.dart';
 import '../../system.dart';
 import '../clinicAbout/clinicAboutScreen.dart';
 import '../login/loginScreen.dart';
+import '../profile/profileScreen.dart';
+import '../schedules/schedulesScreen.dart';
 import '../specialty/specialtyScreen.dart';
 
 //para inserir um nome menu
@@ -39,7 +41,9 @@ class MenuScreen extends StatefulWidget {
           new Center(child: new Text('faz por voçê!', style: new TextStyle(color: Colors.white, fontSize: 24.0 ,fontWeight: FontWeight.normal)),)
         ],
       )
-),
+    ),
+    new MenuItemModel('Perfil', 'assets/images/profile.png', ProfileScreen, null, null),
+    new MenuItemModel('Horarios', 'assets/images/schedules.png', SchedulesScreen, null, null),
     new MenuItemModel('Sair', 'assets/images/exit.png', null, null, null),
   ];
 
@@ -141,6 +145,10 @@ Widget _getInstacePage(Type type, Size size) {
       return new ClinicAboutScreen();
     case SpecialtyScreen:
       return new SpecialtyScreen(size);
+    case ProfileScreen:
+      return new ProfileScreen(size);
+        case SchedulesScreen:
+      return new SchedulesScreen(size);
     default:
       Navigator.pushAndRemoveUntil(
           menuScreenState.context,

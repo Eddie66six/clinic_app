@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../components/buttons/primaryButton.dart';
 import '../../components/inputs/normalInput.dart';
-import '../../services/cepService.dart';
+import '../../repository/cepRepository.dart';
 import '../../systemDialog.dart';
 import '../../systemLoading.dart';
 import '../menu/menuScreen.dart';
@@ -15,6 +17,11 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   TextEditingController cpfController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+
+  Future<Null> _login(String cep) async {
+    var objCep = await new CepRepository().fetchCep(cep);
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -50,17 +57,14 @@ class LoginScreenState extends State<LoginScreen> {
                     SystemDialog.openAlertDialog(context,size.width, 'Dados Não encontrados');
                   } else {
                     SystemLoading.onLoadingShow(context);
-                    var cep = new Cep();
-                    cep.getAdress('18052601').then((result){
-                        print(result.data);
-                        SystemLoading.onLoadingHide(context);
-                        if(!result.error)
+                    _login('18052601').then((result){
+                        if(result == null)
                           Navigator.pushAndRemoveUntil(context,new MaterialPageRoute(builder: (context) => new MenuScreen()),(Route<dynamic> route) => false);
                         else{
-                          SystemDialog.openAlertDialog(context,size.width, result.data);
+                          SystemLoading.onLoadingHide(context);
+                          SystemDialog.openAlertDialog(context,size.width, 'Ocorreu um erro!');
                         }
-                      }
-                    ).catchError((error){
+                    }).catchError((erro){
                       SystemLoading.onLoadingHide(context);
                       SystemDialog.openAlertDialog(context,size.width, 'Erro');
                     });
