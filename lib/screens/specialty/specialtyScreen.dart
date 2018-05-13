@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,14 @@ class SpecialtyScreen extends StatefulWidget {
 }
 
 class SpecialtyScreenState extends State<SpecialtyScreen> {
-  var list = List<SpecialtyModel>();
+  var specialtyList = List<SpecialtyModel>();
 
   Future<Null> _getSpecialty(String cep) async {
     var objCep = await new CepRepository().fetchCep(cep);
     setState(() {
-      print(objCep);
+      new List.generate(10, (index){
+        specialtyList.add(new SpecialtyModel('seila ' + index.toString(), new Random().nextDouble() * 100));
+      });
     });
   }
 
@@ -48,13 +51,13 @@ class SpecialtyScreenState extends State<SpecialtyScreen> {
         child: new SingleChildScrollView(
       padding: new EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
       child: new Column(
-        children: new List.generate(list.length, (index) {
+        children: new List.generate(specialtyList.length, (index) {
           return new Container(
             margin: new EdgeInsets.only(bottom: 25.0),
             child: new LineProgessBar(
                 size,
-                list[index].percentage,
-                list[index].text,
+                specialtyList[index].percentage,
+                specialtyList[index].text,
                 SystemColors.PROGRESS_BAR_BACKGROUND,
                 SystemColors.PROGRESS_BAR_STATUS),
           );

@@ -1,7 +1,17 @@
 class SchedulesModel{
-  SchedulesModel(this.title, this.description, this.dateTime, this.doctor);
+  String urlImage;
   String title;
+  String firstDescription;
   String description;
-  DateTime dateTime;
-  String doctor;
+
+  SchedulesModel(this.urlImage, this.title, this.firstDescription, this.description);
+
+  factory SchedulesModel.fromJson(Map<String, dynamic> json){
+    return new SchedulesModel(
+     json[''],
+     json[''],
+     json[''],
+     json['']
+    );
+  }
 }
