@@ -41,7 +41,7 @@ class SchedulesScreenState extends State<SchedulesScreen> {
               .add_Hm()
               .format(new DateTime.now())
               .toString(),
-          'Mariana R. Souza',
+          'Mariana J. Duarte',
           'Nutricionista'));
       });
       print('carregado..');
