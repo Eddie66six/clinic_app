@@ -54,7 +54,7 @@ class MenuScreen extends StatefulWidget {
 class MenuScreenState extends State<MenuScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var menus = List<Widget>();
-  var user = new UserModel('Guilherme Eddie',
+  var user = new UserModel('Guilherme R. Souza',
       'https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
   @override
   Widget build(BuildContext context) {

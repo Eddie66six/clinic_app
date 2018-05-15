@@ -19,6 +19,10 @@ class SystemColors {
   //progress bar
   static const PROGRESS_BAR_BACKGROUND =  Colors.grey;
   static const PROGRESS_BAR_STATUS =  PRIMARY_SWATCH;
+
+  //schedules list
+  static const SCHEDULES_CARD_BACKGROUND =  Colors.white;
+  static const SCHEDULES_CARD_SHADOW =  Colors.black12;
 }
 
 class SystemRadius {

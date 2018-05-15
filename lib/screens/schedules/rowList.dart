@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../system.dart';
+
 class RowList extends StatelessWidget {
   final String urlImage;
   final String title;
@@ -32,12 +34,12 @@ class _RowListCard extends StatelessWidget {
       height: 120.0,
       margin: new EdgeInsets.only(left: 40.0),
       decoration: new BoxDecoration(
-          color: Colors.white,
+          color: SystemColors.SCHEDULES_CARD_BACKGROUND,
           shape: BoxShape.rectangle,
           borderRadius: new BorderRadius.circular(8.0),
           boxShadow: <BoxShadow>[
             new BoxShadow(
-                color: Colors.black12,
+                color: SystemColors.SCHEDULES_CARD_SHADOW,
                 blurRadius: 10.0,
                 offset: new Offset(0.0, 10.0))
           ]),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import '../../components/inputs/dateTimePicker.dart';
 import '../../models/schedulesModel.dart';
 import '../../repository/testeRepository.dart';
 import '../../systemLoading.dart';
@@ -15,6 +16,7 @@ class SchedulesScreen extends StatefulWidget {
 }
 
 class SchedulesScreenState extends State<SchedulesScreen> {
+  DateTime _fromDate = new DateTime.now();
   var cep = new TesteRepository();
   var schedulesList = new List<SchedulesModel>();
 
@@ -34,15 +36,15 @@ class SchedulesScreenState extends State<SchedulesScreen> {
   Future<Null> _onRefresh() async {
     var result = await new TesteRepository().fetchTeste();
     setState(() {
-      new List.generate(10, (index){
+      new List.generate(10, (index) {
         schedulesList.add(new SchedulesModel(
-          "http://moziru.com/images/iron-maiden-clipart-heavy-metal-5.jpg",
-          new DateFormat("d/M/y")
-              .add_Hm()
-              .format(new DateTime.now())
-              .toString(),
-          'Mariana J. Duarte',
-          'Nutricionista'));
+            "http://moziru.com/images/iron-maiden-clipart-heavy-metal-5.jpg",
+            new DateFormat("d/M/y")
+                .add_Hm()
+                .format(new DateTime.now())
+                .toString(),
+            'Mariana J. Duarte',
+            'Nutricionista'));
       });
       print('carregado..');
     });
@@ -51,20 +53,39 @@ class SchedulesScreenState extends State<SchedulesScreen> {
   @override
   Widget build(BuildContext context) {
     return new Expanded(
-      flex: 1,
-      child: new RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: new ListView.builder(
-          itemCount: schedulesList.length,
-          itemBuilder: (context, index) {
-            return new RowList(
-                schedulesList[index].urlImage,
-                schedulesList[index].title,
-                schedulesList[index].firstDescription,
-                schedulesList[index].description);
-          },
-        ),
-      ),
-    );
+        flex: 1,
+        child: new Column(
+          children: <Widget>[
+            //date
+            new Container(
+              child: new DateTimePicker(
+                labelText: '',
+                selectedDate: _fromDate,
+                selectDate: (DateTime date) {
+                  setState(() {
+                    _fromDate = date;
+                  });
+                },
+              ),
+            ),
+            //list
+            new Expanded(
+              flex: 1,
+              child: new RefreshIndicator(
+                onRefresh: _onRefresh,
+                child: new ListView.builder(
+                  itemCount: schedulesList.length,
+                  itemBuilder: (context, index) {
+                    return new RowList(
+                        schedulesList[index].urlImage,
+                        schedulesList[index].title,
+                        schedulesList[index].firstDescription,
+                        schedulesList[index].description);
+                  },
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }
