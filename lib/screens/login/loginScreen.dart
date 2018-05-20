@@ -26,9 +26,17 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return new Scaffold(
-      body: new Container(
+      body: new SingleChildScrollView(
+        physics: new NeverScrollableScrollPhysics(),
+        child: new Container(
         height: size.height,
-        decoration: new BoxDecoration(color: Colors.white),
+        decoration: new BoxDecoration(
+          color: Colors.transparent,
+          image: new DecorationImage(
+            image: new AssetImage('assets/images/loginBackground.png'),
+            fit: BoxFit.cover
+          )
+        ),
         child: new SingleChildScrollView(
           child: new Column(
             children: <Widget>[
@@ -76,7 +84,7 @@ class LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   new FlatButton(
                     onPressed: () {},
-                    child: new Text("Primeiro acesso"),
+                    child: new Text("Primeiro acesso?"),
                   ),
                 ],
               )
@@ -84,6 +92,7 @@ class LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+      )
     );
   }
 }

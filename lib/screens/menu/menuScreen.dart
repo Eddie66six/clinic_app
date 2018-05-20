@@ -11,6 +11,7 @@ import '../login/loginScreen.dart';
 import '../profile/profileScreen.dart';
 import '../schedules/schedulesScreen.dart';
 import '../specialty/specialtyScreen.dart';
+import '../videoGallery/videoGalleryScreen.dart';
 
 //para inserir um nome menu
 //1 - apos criar pagina que vai ter no menu é nescessario registrala
@@ -44,6 +45,7 @@ class MenuScreen extends StatefulWidget {
     ),
     new MenuItemModel('Perfil', 'assets/images/profile.png', ProfileScreen, null, null),
     new MenuItemModel('Horarios', 'assets/images/schedules.png', SchedulesScreen, null, null),
+    new MenuItemModel('Galeria de videos', 'assets/images/schedules.png', VideoGalleryScreen, null, null),
     new MenuItemModel('Sair', 'assets/images/exit.png', null, null, null),
   ];
 
@@ -60,6 +62,7 @@ class MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     if (menuScreenState.widget == null) {
       reset();
+      return new Text('');
     }
     var size = MediaQuery.of(context).size;
     //generate menus
@@ -147,16 +150,19 @@ Widget _getInstacePage(Type type, Size size) {
       return new SpecialtyScreen(size);
     case ProfileScreen:
       return new ProfileScreen(size);
-        case SchedulesScreen:
+    case SchedulesScreen:
       return new SchedulesScreen(size);
+    case VideoGalleryScreen:
+      return new VideoGalleryScreen(size);
     default:
       Navigator.pushAndRemoveUntil(
           menuScreenState.context,
           new MaterialPageRoute(builder: (context) => new LoginScreen()),
-          (Route<dynamic> route) => false);
+          (Route<dynamic> route) => true
+        );
       menuScreenState = new MenuScreenState();
-      return null;
-  }
+      return new Text('');
+  }  
 }
 
 void reset() {
@@ -234,22 +240,36 @@ class HeaderMenu extends StatelessWidget {
         decoration: new BoxDecoration(
           color: SystemColors.TOP_MENU_BACKGROUND,
         ),
-        child: new Center(
-            child: new Column(
+        child: new Container(
+          margin: new EdgeInsets.all(5.0),
+            child: new Row(
           children: <Widget>[
             new Container(
               height: 100.0,
               width: 100.0,
-              margin: new EdgeInsets.only(top: 40.0),
+              margin: new EdgeInsets.all(10.0),
               child: new CircleAvatar(
                 backgroundImage:
                     new NetworkImage(menuScreenState.user.urlImage),
               ),
             ),
-            new Container(
-              padding: new EdgeInsets.all(20.0),
-              child: new Text(menuScreenState.user.name),
-            )
+            new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                new Container(
+              alignment: Alignment.center,
+              child: new Text(menuScreenState.user.name, style: new TextStyle(fontSize: 18.0),),
+            ),
+            new Text('Proxima consulta:'),
+            new Text('Nenhuma consulta')
+              ],
+            ),
+            new Expanded(
+              flex: 1,
+              child: new Text(''),
+            ),
           ],
         ))));
   }
