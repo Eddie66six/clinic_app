@@ -15,7 +15,7 @@ class RowListState extends State<RowList>{
   @override
   Widget build(BuildContext context) {
     return (new Container(
-        margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+        padding: new EdgeInsets.all(10.0),
         child: new Stack(
           children: <Widget>[
             //card
@@ -39,7 +39,7 @@ class _RowListCard extends StatelessWidget {
       decoration: new BoxDecoration(
           color: SystemColors.SCHEDULES_CARD_BACKGROUND,
           shape: BoxShape.rectangle,
-          borderRadius: new BorderRadius.circular(8.0),
+          borderRadius: new BorderRadius.circular(2.0),
           boxShadow: <BoxShadow>[
             new BoxShadow(
                 color: SystemColors.SCHEDULES_CARD_SHADOW,
@@ -59,7 +59,7 @@ class _RowListTitle extends StatelessWidget {
       height: 120.0,
       decoration: new BoxDecoration(color: Colors.transparent),
       // margin: new EdgeInsets.only(left: 40.0),
-      padding: const EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.all(10.0),
       alignment: FractionalOffset.topCenter,
       child: new Text(
         title,
@@ -82,9 +82,10 @@ class _RowListBodyState extends State<_RowListBody> {
   @override
   Widget build(BuildContext context) {
     return (new Container(
-      height: 200.0,
+      height: 250.0,
+      padding: new EdgeInsets.all(10.0),
       decoration: new BoxDecoration(color: Colors.transparent),
-      margin: new EdgeInsets.only(top: 40.0),
+      margin: new EdgeInsets.only(top: 25.0),
       alignment: Alignment.center,
       child: new InkWell(
         onTap: (){
