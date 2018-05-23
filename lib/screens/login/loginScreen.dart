@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../components/buttons/primaryButton.dart';
+import '../../components/buttons/roundedButton.dart';
+import '../../components/inputs/containerInput.dart';
 import '../../components/inputs/normalInput.dart';
 import '../../repository/cepRepository.dart';
 import '../../systemDialog.dart';
@@ -34,30 +36,48 @@ class LoginScreenState extends State<LoginScreen> {
           color: Colors.transparent,
           image: new DecorationImage(
             image: new AssetImage('assets/images/loginBackground.png'),
-            fit: BoxFit.cover
+            fit: BoxFit.fill
           )
         ),
-        child: new SingleChildScrollView(
+        child: new Container(
+          padding: new EdgeInsets.all(35.0),
           child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              //logo
               new Container(
+                  margin: new EdgeInsets.only(bottom: 40.0, top: 35.0),
                   decoration: new BoxDecoration(),
-                  margin: new EdgeInsets.only(top: 35.0),
                   child: new Image(
                     image: new AssetImage('assets/images/loginLogo.png'),
-                    height: 160.0,
-                    width: 160.0,
+                    height: 130.0,
+                    width: 130.0,
                   )),
-              new NormalInput(
-                hintText: "CPF",
-                controller: cpfController,
+                //form
+              new ContainerInput('Digite seu CPF',size.width),
+              new Container(margin: new EdgeInsets.all(5.0),),
+              new ContainerInput('Senha',size.width),
+              new Container(
+                margin: new EdgeInsets.only(bottom: 15.0, top: 10.0),
+                child: new Row(
+                  children: <Widget>[
+                    new Container(
+                      height: 30.0,
+                      width: 30.0,
+                      decoration: new BoxDecoration(
+                        color: const Color.fromARGB(255, 30, 96, 238),
+                        borderRadius: new BorderRadius.circular(8.0)
+                      ),
+                      child: new Checkbox(value: true, onChanged: (value){})
+                    ),
+                    new Container(
+                      margin: new EdgeInsets.only(left: 10.0),
+                      child: new Text('Mantenha-me conectado', style: new TextStyle(fontSize: 21.0, color: Colors.white),)
+                    )
+                  ],
+                ),
               ),
-              new NormalInput(
-                hintText: "SENHA",
-                isPassword: true,
-                controller: passwordController,
-              ),
-              new PrimaryButton(
+              new RoundedButton(
                 text: "Entrar",
                 screenWidthSize: size.width,
                 tap: () {
@@ -79,14 +99,17 @@ class LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
-              new Row(
+              new Container(
+                margin: new EdgeInsets.only(top: 15.0),
+                child: new Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new FlatButton(
                     onPressed: () {},
-                    child: new Text("Primeiro acesso?"),
+                    child: new Text("Esquceu sua senha?", style: new TextStyle(color: Colors.white, fontSize: 15.0),),
                   ),
                 ],
+              )
               )
             ],
           ),
