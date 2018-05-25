@@ -40,9 +40,11 @@ class LoginScreenState extends State<LoginScreen> {
           )
         ),
         child: new Container(
-          padding: new EdgeInsets.all(35.0),
+          height: size.height,
+          padding: new EdgeInsets.only(left: 35.0,right: 35.0),
           child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               //logo
               new Container(
@@ -54,11 +56,11 @@ class LoginScreenState extends State<LoginScreen> {
                     width: 130.0,
                   )),
                 //form
-              new ContainerInput('Digite seu CPF',size.width),
+              new ContainerInput('Digite seu CPF',size.width, cpfController),
               new Container(margin: new EdgeInsets.all(5.0),),
-              new ContainerInput('Senha',size.width),
+              new ContainerInput('Senha',size.width, passwordController),
               new Container(
-                margin: new EdgeInsets.only(bottom: 15.0, top: 10.0),
+                margin: new EdgeInsets.only(bottom: 20.0, top: 20.0),
                 child: new Row(
                   children: <Widget>[
                     new Container(
@@ -99,8 +101,9 @@ class LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
+              //esqueceu a senha
               new Container(
-                margin: new EdgeInsets.only(top: 15.0),
+                margin: new EdgeInsets.only(top: 5.0),
                 child: new Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -110,6 +113,16 @@ class LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               )
+              ),
+              //divisor
+              new Container(
+                margin: new EdgeInsets.only(top: 40.0),
+                height: 0.5, decoration: new BoxDecoration(color: Colors.white),),
+              new Container(
+                child: new FlatButton(
+                  onPressed: (){},
+                  child: new Text('Registre-se', style: new TextStyle(fontSize: 21.0, color: Colors.white),)
+                ),
               )
             ],
           ),

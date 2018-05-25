@@ -30,8 +30,8 @@ class MenuScreen extends StatefulWidget {
 
   //config menus
   final List<MenuItemModel> menus = <MenuItemModel>[
-    new MenuItemModel('Sobre', 'assets/images/about.png', ClinicAboutScreen, null, null),
-    new MenuItemModel('Especialidades', 'assets/images/specialty.png', SpecialtyScreen,
+    new MenuItemModel('Sobre', 'assets/images/aboutIcon.png', ClinicAboutScreen, null, null),
+    new MenuItemModel('Especialidades', 'assets/images/specialtyIcon.png', SpecialtyScreen,
       'assets/images/specialtyHeaderBackground.png',
       new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,9 +43,9 @@ class MenuScreen extends StatefulWidget {
         ],
       )
     ),
-    new MenuItemModel('Perfil', 'assets/images/profile.png', ProfileScreen, null, null),
-    new MenuItemModel('Horarios', 'assets/images/schedules.png', SchedulesScreen, null, null),
-    new MenuItemModel('Galeria de videos', 'assets/images/schedules.png', VideoGalleryScreen, null, null),
+    new MenuItemModel('Perfil', 'assets/images/profileIcon.png', ProfileScreen, null, null),
+    new MenuItemModel('Horarios', 'assets/images/schedulesIcon.png', SchedulesScreen, null, null),
+    new MenuItemModel('Galeria de videos', 'assets/images/schedulesIcon.png', VideoGalleryScreen, null, null),
     new MenuItemModel('Sair', 'assets/images/exit.png', null, null, null),
   ];
 
@@ -74,10 +74,17 @@ class MenuScreenState extends State<MenuScreen> {
             drawer: new Drawer(
                 child: new Center(
                     child: new Container(
-                        child: new Column(children: <Widget>[
-              new HeaderMenu(),
-              //rows
-              new Column(children: menus),
+                        child: new Column(
+                          children: <Widget>[
+                          new HeaderMenu(),
+                          //rows
+                          new Expanded(
+                            flex: 1,
+                            child: new ListView(
+                              padding: new EdgeInsets.all(0.0),
+                              children: menus
+                            ),
+                          ),
             ])))),
             body: new CustomAppBar(widget, size, _scaffoldKey)));
   }
@@ -176,7 +183,10 @@ void _createMenus() {
   if (menuScreenState.menus.length != menuScreenState.widget.menus.length) {
     var index = 0;
     for (var menu in menuScreenState.widget.menus) {
-      menuScreenState.menus.add(new RowMenuItem(menu, index));
+      menuScreenState.menus.add(new Column(children: <Widget>[
+        new RowMenuItem(menu, index),
+        new Container(height: 0.5, decoration: new BoxDecoration(color: Colors.grey[300]),)
+      ],));
       index++;
     }
   }
@@ -206,7 +216,7 @@ class RowMenuItemState extends State<RowMenuItem> {
             });
           },
           child: new Container(
-            padding: new EdgeInsets.all(10.0),
+            padding: new EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
             decoration: new BoxDecoration(
                 color: selectedIndex == widget.index
                     ? SystemColors.SELECTED_MENU_BACKGROUND
@@ -222,7 +232,7 @@ class RowMenuItemState extends State<RowMenuItem> {
                 ),
                 new Container(
                   margin: new EdgeInsets.only(left: 10.0),
-                  child: new Text(widget.menu.title),
+                  child: new Text(widget.menu.title, style: new TextStyle(color: const Color.fromARGB(255, 53, 88, 129)),),
                 )
               ],
             ),
@@ -236,41 +246,67 @@ class HeaderMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (new Container(
-        height: 200.0,
+        height: 230.0,
         decoration: new BoxDecoration(
-          color: SystemColors.TOP_MENU_BACKGROUND,
+          image: new DecorationImage(
+            image: new AssetImage('assets/images/perfilBackgroundMenu.png'),
+            fit: BoxFit.cover
+          ),
         ),
         child: new Container(
-          margin: new EdgeInsets.all(5.0),
-            child: new Row(
-          children: <Widget>[
-            new Container(
-              height: 100.0,
-              width: 100.0,
-              margin: new EdgeInsets.all(10.0),
-              child: new CircleAvatar(
-                backgroundImage:
-                    new NetworkImage(menuScreenState.user.urlImage),
-              ),
-            ),
-            new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          margin: new EdgeInsets.all(10.0),
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                new Row(
+                    children: <Widget>[
+                      new Container(
+                        height: 100.0,
+                        width: 100.0,
+                        margin: new EdgeInsets.only(left: 0.0, right: 10.0),
+                        child: new CircleAvatar(
+                          backgroundImage:
+                              new NetworkImage(menuScreenState.user.urlImage),
+                        ),
+                      ),
+                      new Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          new Container(
+                            margin: new EdgeInsets.only(bottom: 0.0),
+                        alignment: Alignment.center,
+                        child: new Text(menuScreenState.user.name, style: new TextStyle(fontSize: 18.0, color: Colors.white),),
+                      ),
+                      new Text('Proxima consulta dia',style: new TextStyle(color: Colors.white)),
+                      new Text('05/08/2018',style: new TextStyle(color: Colors.white))
+                        ],
+                      ),
+                      new Expanded(
+                        flex: 1,
+                        child: new Text(''),
+                      ),
+                    ],
+                ),
                 new Container(
-              alignment: Alignment.center,
-              child: new Text(menuScreenState.user.name, style: new TextStyle(fontSize: 18.0),),
-            ),
-            new Text('Proxima consulta:'),
-            new Text('Nenhuma consulta')
+                  margin: new EdgeInsets.only(bottom: 5.0, top: 20.0),
+                  padding: new EdgeInsets.only(left: 15.0),
+                  decoration: new BoxDecoration(
+                    color: const Color.fromARGB(30, 255, 255, 255),
+                    borderRadius: new BorderRadius.circular(35.0)
+                  ),
+                  child: new TextField(
+                    style: new TextStyle(color: Colors.white),
+                    decoration: new InputDecoration(
+                      border: InputBorder.none,
+                      icon: new Icon(Icons.search, color: Colors.white,),
+                      hintStyle: new TextStyle(color: Colors.white70),
+                      hintText: 'Procurar...'
+                    ),
+                  ),
+                )
               ],
-            ),
-            new Expanded(
-              flex: 1,
-              child: new Text(''),
-            ),
-          ],
         ))));
   }
 }
