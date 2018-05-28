@@ -21,50 +21,32 @@ import '../videoGallery/videoGalleryScreen.dart';
 
 //first page to initialize
 MenuScreenState menuScreenState = new MenuScreenState();
-Widget pageSelected = new ClinicAboutScreen();
+Size size;
+Widget pageSelected = new SchedulesScreen(menus[selectedIndex],size, _scaffoldKey);
 int selectedIndex = 0;
 String title = 'Sobre';
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class MenuScreen extends StatefulWidget {
   MenuScreen({Key key}) : super(key: key);
-
-  //config menus
-  final List<MenuItemModel> menus = <MenuItemModel>[
-    new MenuItemModel('Sobre', 'assets/images/aboutIcon.png', ClinicAboutScreen, null, null),
-    new MenuItemModel('Especialidades', 'assets/images/specialtyIcon.png', SpecialtyScreen,
-      'assets/images/specialtyHeaderBackground.png',
-      new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          new Text('Conheça tudo que o INCAR', style: new TextStyle(color: Colors.white, fontSize: 24.0 ,fontWeight: FontWeight.normal)),
-          new Center(child: new Text('faz por voçê!', style: new TextStyle(color: Colors.white, fontSize: 24.0 ,fontWeight: FontWeight.normal)),)
-        ],
-      )
-    ),
-    new MenuItemModel('Perfil', 'assets/images/profileIcon.png', ProfileScreen, null, null),
-    new MenuItemModel('Horarios', 'assets/images/schedulesIcon.png', SchedulesScreen, null, null),
-    new MenuItemModel('Galeria de videos', 'assets/images/schedulesIcon.png', VideoGalleryScreen, null, null),
-    new MenuItemModel('Sair', 'assets/images/exit.png', null, null, null),
-  ];
 
   @override
   MenuScreenState createState() => menuScreenState;
 }
 
 class MenuScreenState extends State<MenuScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var menus = List<Widget>();
-  var user = new UserModel('Guilherme R. Souza',
-      'https://whiplash.org/imagens-n/temp09/1434771134_08.jpg');
+  var user = new UserModel('Mariana silva',
+      'https://lh5.googleusercontent.com/-opcZrSeXrMQ/TYCdLJWMKbI/AAAAAAAAABs/0C3C3Li21x0/s1600/1.jpg');
+  
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     if (menuScreenState.widget == null) {
-      reset();
+      selectedIndex = 0;
+      title = 'Sobre';
       return new Text('');
     }
-    var size = MediaQuery.of(context).size;
     //generate menus
     _createMenus();
     return new WillPopScope(
@@ -86,65 +68,7 @@ class MenuScreenState extends State<MenuScreen> {
                             ),
                           ),
             ])))),
-            body: new CustomAppBar(widget, size, _scaffoldKey)));
-  }
-}
-
-//custom app bar
-class CustomAppBar extends StatelessWidget {
-  CustomAppBar(this.menuScreen, this.size, this._scaffoldKey);
-  final MenuScreen menuScreen;
-  final Size size;
-  final GlobalKey<ScaffoldState> _scaffoldKey;
-  @override
-  Widget build(BuildContext context) {
-    return (menuScreen.menus[selectedIndex].headerBackground != null
-        ? new Column(
-            children: <Widget>[
-              new Container(
-                height: size.height / 3.5,
-                width: size.width,
-                decoration: new BoxDecoration(
-                    image: new DecorationImage(
-                        image: new AssetImage(
-                            menuScreen.menus[selectedIndex].headerBackground),
-                        fit: BoxFit.fill)),
-                child: new Row(
-                  children: <Widget>[
-                    new Container(
-                      padding: new EdgeInsets.only(top: 35.0),
-                      alignment: Alignment.topLeft,
-                      child: new IconButton(
-                        icon: new Icon(Icons.dehaze),
-                        onPressed: () => _scaffoldKey.currentState.openDrawer(),
-                      ),
-                    ),
-                    new Container (
-                      height: size.height / 4,
-                      width: size.width /1.2,
-                      child: menuScreen.menus[selectedIndex].messageHeader ?? new Text('')
-                      )
-                  ],
-                ),
-              ),
-              pageSelected
-            ],
-          )
-        : new Column(
-            children: <Widget>[
-              new Container(
-                decoration:
-                    new BoxDecoration(color: SystemColors.PRIMARY_SWATCH),
-                padding: new EdgeInsets.only(top: 30.0),
-                alignment: Alignment.topLeft,
-                child: new IconButton(
-                  icon: new Icon(Icons.dehaze),
-                  onPressed: () => _scaffoldKey.currentState.openDrawer(),
-                ),
-              ),
-              pageSelected
-            ],
-          ));
+            body: pageSelected));
   }
 }
 
@@ -152,15 +76,15 @@ class CustomAppBar extends StatelessWidget {
 Widget _getInstacePage(Type type, Size size) {
   switch (type) {
     case ClinicAboutScreen:
-      return new ClinicAboutScreen();
+      return new ClinicAboutScreen(menus[selectedIndex],size, _scaffoldKey);
     case SpecialtyScreen:
-      return new SpecialtyScreen(size);
+      return new SpecialtyScreen(menus[selectedIndex],size, _scaffoldKey);
     case ProfileScreen:
-      return new ProfileScreen(size);
+      return new ProfileScreen(menus[selectedIndex],size, _scaffoldKey);
     case SchedulesScreen:
-      return new SchedulesScreen(size);
+      return new SchedulesScreen(menus[selectedIndex],size, _scaffoldKey);
     case VideoGalleryScreen:
-      return new VideoGalleryScreen(size);
+      return new VideoGalleryScreen(size, _scaffoldKey);
     default:
       Navigator.pushAndRemoveUntil(
           menuScreenState.context,
@@ -168,21 +92,15 @@ Widget _getInstacePage(Type type, Size size) {
           (Route<dynamic> route) => true
         );
       menuScreenState = new MenuScreenState();
-      return new Text('');
+      return new SchedulesScreen(menus[selectedIndex],size, _scaffoldKey);
   }  
-}
-
-void reset() {
-  pageSelected = new ClinicAboutScreen();
-  selectedIndex = 0;
-  title = 'Sobre';
 }
 
 //create menus
 void _createMenus() {
-  if (menuScreenState.menus.length != menuScreenState.widget.menus.length) {
+  if (menuScreenState.menus.length != menus.length) {
     var index = 0;
-    for (var menu in menuScreenState.widget.menus) {
+    for (var menu in menus) {
       menuScreenState.menus.add(new Column(children: <Widget>[
         new RowMenuItem(menu, index),
         new Container(height: 0.5, decoration: new BoxDecoration(color: Colors.grey[300]),)
@@ -331,3 +249,52 @@ Future<bool> _onWillPop() {
       ) ??
       false;
 }
+
+//config menus
+final List<MenuItemModel> menus = <MenuItemModel>[
+    new MenuItemModel('Minhas consultas', 'assets/images/schedulesIcon.png', SchedulesScreen, 'assets/images/profileHeaderBackground.png',null, null,0.0),
+    new MenuItemModel('Especialidades', 'assets/images/specialtyIcon.png', SpecialtyScreen,'assets/images/specialtyHeaderBackground.png',
+      new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          new Text('Especialidades', style: new TextStyle(fontSize: 24.0, color: Colors.white,)),
+          new Container(margin: new EdgeInsets.only(top: 15.0),),
+          new Text('', style: new TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold)),
+          new Container(
+            margin: new EdgeInsets.only(top: 20.0),
+            height: 150.0,
+            width: 150.0,
+            child: new CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: new AssetImage('assets/images/logo.png'),
+            ),
+          )
+        ],
+      ), 
+    null,65.0),
+    new MenuItemModel('Canal de saude', 'assets/images/movieIcon.png', VideoGalleryScreen, null, null, null,0.0),
+    new MenuItemModel('Contatos', 'assets/images/aboutIcon.png', ClinicAboutScreen, null, null, null,0.0),
+    new MenuItemModel('Perfil', 'assets/images/profileIcon.png', ProfileScreen, 'assets/images/profileHeaderBackground.png',
+        new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          new Text('Bem vindo(a)!', style: new TextStyle(fontSize: 24.0, color: Colors.white,)),
+          new Container(margin: new EdgeInsets.only(top: 10.0),),
+          new Text(menuScreenState.user.name, style: new TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold)),
+          new Container(
+            margin: new EdgeInsets.only(top: 20.0),
+            height: 130.0,
+            width: 130.0,
+            child: new CircleAvatar(
+              backgroundImage: new NetworkImage(menuScreenState.user.urlImage),
+            ),
+          )
+        ],
+      ), 
+    new Text(''),45.0),
+    new MenuItemModel('Sair', 'assets/images/exit.png', null, null, null, null,0.0),
+  ];

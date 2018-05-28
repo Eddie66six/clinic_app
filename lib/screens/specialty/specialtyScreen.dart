@@ -4,15 +4,19 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../components/others/lineProgessBar.dart';
+import '../../models/menuItemModel.dart';
 import '../../models/specialtyModel.dart';
 import '../../repository/cepRepository.dart';
+import '../../shared/customAppBar.dart';
 import '../../system.dart';
 import '../../systemDialog.dart';
 import '../../systemLoading.dart';
 
 class SpecialtyScreen extends StatefulWidget {
-  SpecialtyScreen(this.size);
+  SpecialtyScreen(this._menu,this.size, this._scaffoldKey);
+  final MenuItemModel _menu;
   final Size size;
+  final GlobalKey<ScaffoldState> _scaffoldKey;
   @override
   SpecialtyScreenState createState() => new SpecialtyScreenState();
 }
@@ -47,7 +51,8 @@ class SpecialtyScreenState extends State<SpecialtyScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return new Expanded(
+    return new CustomAppBar(widget._menu, widget.size, widget._scaffoldKey,
+    new Expanded(
         child: new SingleChildScrollView(
       padding: new EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
       child: new Column(
@@ -63,6 +68,6 @@ class SpecialtyScreenState extends State<SpecialtyScreen> {
           );
         }),
       ),
-    ));
+    )),null, logoSize: true,);
   }
 }

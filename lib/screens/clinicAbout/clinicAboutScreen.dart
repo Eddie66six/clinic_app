@@ -1,9 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
 
+import '../../models/menuItemModel.dart';
+import '../../shared/customAppBar.dart';
+
 class ClinicAboutScreen extends StatefulWidget{
+  ClinicAboutScreen(this._menu, this.size,this._scaffoldKey);
+  final MenuItemModel _menu;
+  final Size size;
+  final GlobalKey<ScaffoldState> _scaffoldKey;
   @override
   ClinicAboutScreenState createState() => new ClinicAboutScreenState();
 }
@@ -31,12 +37,15 @@ class ClinicAboutScreenState extends State<ClinicAboutScreen>{
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
-      children: <Widget>[
-        new Container(
-          child:new Image.network(staticMapUri.toString())
-        )
-      ],
+    return (
+      new CustomAppBar(null, widget.size, widget._scaffoldKey,
+      new Column(
+        children: <Widget>[
+          new Container(
+            child:new Image.network(staticMapUri.toString())
+          )
+        ],
+      ),'')
     );
   }
 }

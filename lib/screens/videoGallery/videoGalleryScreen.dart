@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../../models/videoGalleryModel.dart';
 import '../../repository/youTubeRepository.dart';
+import '../../shared/customAppBar.dart';
 import '../../systemLoading.dart';
 import 'RowList.dart';
 
 class VideoGalleryScreen extends StatefulWidget {
-  VideoGalleryScreen(this.size);
+  VideoGalleryScreen(this.size, this._scaffoldKey);
   final Size size;
+  final GlobalKey<ScaffoldState> _scaffoldKey;
   @override
   VideoGalleryScreenState createState() => new VideoGalleryScreenState();
 }
@@ -31,7 +33,7 @@ class VideoGalleryScreenState extends State<VideoGalleryScreen> {
   }
 
   Future<Null> _onRefresh() async {
-    var result = await new YouTubeRepository().fetchList('shurato abertura');
+    var result = await new YouTubeRepository().fetchList('nutricionasta dicas');
     setState(() {
       print('carregado..');
       videos = result;
@@ -40,7 +42,8 @@ class VideoGalleryScreenState extends State<VideoGalleryScreen> {
 
    @override
   Widget build(BuildContext context) {
-    return new Expanded(
+    return new CustomAppBar(null, widget.size, widget._scaffoldKey,
+      new Expanded(
         flex: 1,
         child: new Column(
           children: <Widget>[
@@ -60,6 +63,6 @@ class VideoGalleryScreenState extends State<VideoGalleryScreen> {
               ),
             )
           ],
-        ));
+        )),'Canal de saude');
   }
 }
