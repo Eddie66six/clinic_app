@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import '../../models/menuItemModel.dart';
 import '../../shared/customAppBar.dart';
 
-class ProfileScreen extends StatefulWidget {
-  ProfileScreen(this._menu, this.size,this._scaffoldKey);
+class HomeScreen extends StatefulWidget {
+  HomeScreen(this._menu, this.size,this._scaffoldKey);
   final MenuItemModel _menu;
   final Size size;
   final GlobalKey<ScaffoldState> _scaffoldKey;
   @override
-  ProfileScreenState createState() => new ProfileScreenState();
+  HomeScreenState createState() => new HomeScreenState();
 }
 
-class ProfileScreenState extends State<ProfileScreen> {
+class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return new CustomAppBar(widget._menu, widget.size, widget._scaffoldKey,
@@ -169,13 +169,14 @@ class CardProfileState extends State<CardProfile>{
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.circular(10.0),
           color: tapDown == false ? Colors.white : Colors.grey[500],
-          shape: BoxShape.rectangle,
-            boxShadow: <BoxShadow>[
-              new BoxShadow(
-                  color: Colors.black45,
-                  blurRadius: 1.0,
-                  offset: new Offset(0.0, 2.0))
-            ]),
+          // shape: BoxShape.rectangle,
+          //   boxShadow: <BoxShadow>[
+          //     new BoxShadow(
+          //         color: Colors.black45,
+          //         blurRadius: 1.0,
+          //         offset: new Offset(0.0, 2.0))
+          //   ]
+          ),
         width: widget.size.width/ 3 - 5,
         child: widget.content,
       ),

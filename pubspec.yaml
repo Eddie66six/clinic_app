@@ -49,7 +49,7 @@ flutter:
     - assets/images/specialtyHeaderBackground.png
     - assets/images/loginBackground.png
     - assets/images/perfilBackgroundMenu.png
-    - assets/images/profileHeaderBackground.png
+    - assets/images/homeHeaderBackground.png
     - assets/images/schedulesFilterHeaderBackground.png
     - assets/images/splashScreen.png
     - assets/images/simpleBackgroundHeaderBar.png
